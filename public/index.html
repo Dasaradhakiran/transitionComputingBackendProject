@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Checklist Dashboard</title>
+        <style>
+            .passed {color: green;}
+            .failed {color: red;}
+        </style>
+        <link rel="stylesheet" href="style.css" >
+    </head>
+    <body>
+        <h1>Checklist Dashboard</h1>
+        <table>
+            <thead>
+                <tr>
+                    <th>RULE</th>
+                    <th class="row-elem">STATUS</th>
+                </tr>
+            </thead>
+            <tbody id="results"></tbody>
+        </table>
+        <script>
+            async function loadResults() {
+                const response = await fetch("/evaluate");
+                const results = await response.json();
+                const tbody = document.getElementById("results");
+                results.forEach(result => {
+                    const row = document.createElement("tr");
+                    row.innerHTML = `
+                        <td>${result.rule}</td>
+                        <td class="${result.status.toLowerCase()}">${result.status}</td>
+                    `;
+                    tbody.appendChild(row);
+                });
+            }
+            loadResults();
+        </script>
+    </body>
+</html>
